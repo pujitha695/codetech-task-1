@@ -1,1 +1,12 @@
 # codetech-task-1
+COMPANY: CODTECH IT SOLUTIONS
+
+NAME: KENGUVA PUJITHA
+
+INTERN ID:CT04DF1654
+
+DOMAIN: Embedded Systems
+
+DURATION: 4 WEEKS
+
+MENTOR: Neela Santhosh Kumar
