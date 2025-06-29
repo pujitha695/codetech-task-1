@@ -18,46 +18,37 @@ CIRCUIT DIAGRAM:
 ![file_00000000e9cc622fbb7281ff79c66694](https://github.com/user-attachments/assets/473400d1-8b28-4a29-8c3b-bd1456fd8e52)
 
 CODE:
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
 
-// Set the LCD I2C address — common ones are 0x27 or 0x3F
-LiquidCrystal_I2C lcd(0x27, 16, 2);  
+// LCD pins: RS, E, D4, D5, D6, D7
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
-const int buttonPin = 2;     // Push button connected to digital pin 2
-int counter = 0;             // Count value
-bool lastButtonState = LOW;
-bool currentButtonState;
-unsigned long lastDebounceTime = 0;
-unsigned long debounceDelay = 50; // milliseconds
+const int buttonPin = 2;
+int counter = 0;
+int buttonState = 0;
+int lastButtonState = 0;
 
 void setup() {
   pinMode(buttonPin, INPUT);
-  lcd.begin();
-  lcd.backlight();
-
-  lcd.setCursor(0, 0);
-  lcd.print("Count: 0");
+  lcd.begin(16, 2);
+  lcd.print("Counter: ");
+  lcd.setCursor(0, 1);
+  lcd.print(counter);
 }
 
 void loop() {
-  int reading = digitalRead(buttonPin);
+  buttonState = digitalRead(buttonPin);
 
-  if (reading != lastButtonState) {
-    lastDebounceTime = millis();  // reset debounce timer
+  if (buttonState == HIGH && lastButtonState == LOW) {
+    counter++;
+    lcd.setCursor(0, 1);
+    lcd.print("                "); // Clear line
+    lcd.setCursor(0, 1);
+    lcd.print(counter);
+    delay(200);  // Debounce delay
   }
 
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (reading == HIGH && lastButtonState == LOW) {
-      counter++;
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Count: ");
-      lcd.print(counter);
-    }
-  }
-
-  lastButtonState = reading;
+  lastButtonState = buttonState;
 }
 
 OUTPUT:
