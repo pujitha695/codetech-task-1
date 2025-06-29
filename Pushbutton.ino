@@ -1,50 +1,29 @@
-// Define the digital pin where the push button is connected
+// Codtech Embedded Systems Internship
+// Task 1: Push Button Counter
 
-int Pushbutton = 10;
-
-// Variable to keep track of how many times the button has been pressed
-
-int Count = 0;
+const int buttonPin = 2;     // Pin where the push button is connected
+int counter = 0;             // Counter variable
+int buttonState = 0;         // Current state of button
+int lastButtonState = 0;     // Previous state of button
 
 void setup() {
-
+  pinMode(buttonPin, INPUT);     // Set button pin as input
+  Serial.begin(9600);            // Start Serial Monitor
+  Serial.println("Push Button Counter Started");
+  Serial.print("Count: ");
+  Serial.println(counter);
 }
-
-// Set the push button pin as input
-
-pinMode(Pushbutton, INPUT);
-
-// Start the Serial Monitor with a baud rate of 9600
-
-Serial.begin(9600);
-
-// Print a message to the Serial Monitor
-
-Serial.println("PUSH BUTTON COUNTER");
 
 void loop() {
+  buttonState = digitalRead(buttonPin);  // Read the current state of button
 
-// Read the current state of the push button (HIGH when pressed)
+  // Detect rising edge: button just pressed
+  if (buttonState == HIGH && lastButtonState == LOW) {
+    counter++;                             // Increase counter
+    Serial.print("Count: ");              // Print updated count
+    Serial.println(counter);
+    delay(200);                           // Simple debounce
+  }
 
-int currentbutton = digitalRead(Pushbutton);
-
-// If the button is pressed
-
-if (currentbutton == HIGH) {
-
-// Increase the count by 1
-Count++;
-
-Serial.print("Count = ");
-
-Serial.println(Count);
-
-// Short delay to avoid counting the same press multiple times
-
-delay(200);
-
-}
-
-// Print the current count to the Serial Monitor
-
+  lastButtonState = buttonState;  // Save the state for next loop
 }
